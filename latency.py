@@ -8,6 +8,9 @@ def summarize(stream):
     rows = csv.DictReader(stream)
     if not {"input_us", "output_us"}.issubset(rows.fieldnames or []):
         raise ValueError("required CSV columns are input_us and output_us")
+    for field in ("input_us", "output_us"):
+        if rows.fieldnames.count(field) > 1:
+            raise ValueError(f"duplicate timestamp column: {field}")
     delays = []
     for row in rows:
         try:
